@@ -23,6 +23,8 @@ def ecreate(d:EntranceIn,u=Depends(current)):return change(u,'登记入口',lamb
 def locate(id:int,d:LocationIn,u=Depends(current)):return change(u,'补正坐标',lambda s:entrance.locate(s,id,d.model_dump()))
 @router.post('/aliases')
 def aliases(d:AliasIn,u=Depends(current)):return change(u,'登记别名',lambda s:entrance.alias(s,d.model_dump()))
+@router.patch('/aliases/{id}')
+def afix(id:int,d:AliasFixIn,u=Depends(current)):return change(u,'补正别名',lambda s:entrance.alias_fix(s,id,d.model_dump()))
 @router.post('/evidence')
 def evidence(d:EvidenceIn,u=Depends(current)):return change(u,'登记证据',lambda s:entrance.evidence(s,d.model_dump()))
 @router.post('/matches')

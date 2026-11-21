@@ -12,6 +12,9 @@ def seed():
   if not any(x.code=='CQ-018-A' for x in rows(s,Entrance)):
    for code,num,label,lat in [('CQ-018-A',18,'长桥路18号正门',31.210),('CQ-018-B',18,'长桥路十八号旧门牌',31.2101),('CQ-081',81,'长桥路81号',31.211),('CQ-018-C',18,'长桥路18号南入口',31.2102)]:
     e=Entrance(code=code,street='长桥路',number=num,label=label,lat=lat,lng=121.48);s.add(e);s.flush();a=Alias(entrance_id=e.id,text=label);s.add(a);s.flush();s.add(Evidence(alias_id=a.id,reference='照片-'+code,description='2026年11月现场门牌照片与老地籍图位置核验说明'))
+    if code=='CQ-018-B':
+     # 旧档坏别名：“十十号”无法规范为门牌数字，留待补正，不应拖垮整批匹配
+     ba=Alias(entrance_id=e.id,text='长桥路十十号旧称');s.add(ba);s.flush();s.add(Evidence(alias_id=ba.id,reference='旧档-'+code,description='历史档案誊抄件，门牌数字写法存疑，待现场补正'))
    s.flush();es=rows(s,Entrance);p=Proposal(code='P031',source_id=es[1].id,target_id=es[0].id,reason='历史十八号门牌与现18号正门同宗同入口');s.add(p);s.flush();s.add(Objection(proposal_id=p.id,code='Y031',note='住户认为旧门牌对应独立南入口，申请现场复核',state='open'))
   s.commit()
 if __name__=='__main__':seed()

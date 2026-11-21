@@ -10,6 +10,8 @@ class LocationIn(Input):
  lat:float=Field(ge=-90,le=90);lng:float=Field(ge=-180,le=180);reason:str=Field(min_length=8,max_length=400)
 class AliasIn(Input):
  entrance_id:int;text:str=Field(min_length=3,max_length=120)
+class AliasFixIn(Input):
+ text:str=Field(min_length=3,max_length=120)
 class EvidenceIn(Input):
  alias_id:int;reference:str=Field(min_length=3,max_length=100);description:str=Field(min_length=8,max_length=500)
 class ProposalIn(Input):

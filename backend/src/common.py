@@ -8,6 +8,9 @@ def get(s,cls,id):
  if x is None:raise HTTPException(404,'记录不存在')
  return x
 def lock(s):return s.scalars(select(Registry).where(Registry.id==1).with_for_update().execution_options(populate_existing=True)).one()
+def bump_revision(s):
+ # 入口/别名资料每次变更都抬升修订号；旧批次结果即与当前资料脱版
+ r=lock(s);r.revision=(r.revision or 0)+1;return r.revision
 def log(s,u,action,detail):s.add(Audit(actor=u['email'],action=action,detail=str(detail)[:500]))
 def rows(s,cls):return s.scalars(select(cls).order_by(cls.id)).all()
 def dump(x):return {c.name:getattr(x,c.name) for c in x.__table__.columns}
